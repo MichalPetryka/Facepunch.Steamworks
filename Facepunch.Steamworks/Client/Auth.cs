@@ -67,12 +67,11 @@ namespace Facepunch.Steamworks
 				uint ticketLength = 0;
 				client.RegisterCallback<GetAuthSessionTicketResponse_t>(AuthResponse);
 				uint ticket = client.native.user.GetAuthSessionTicket( (IntPtr) b, data.Length, out ticketLength );
-				client.RunCallbacks();
 				while (!_responded)
 				{
-					
+					client.RunCallbacks();
 				}
-                if ( ticket == 0 )
+				if ( ticket == 0 )
                     return null;
 
                 return new Ticket()
