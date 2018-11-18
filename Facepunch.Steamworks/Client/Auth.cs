@@ -25,6 +25,7 @@ namespace Facepunch.Steamworks
     public class Auth
 	{
 		internal Client client;
+		internal bool _responded = false;
 
 		public class Ticket : IDisposable
         {
@@ -64,8 +65,13 @@ namespace Facepunch.Steamworks
             fixed ( byte* b = data )
 			{
 				uint ticketLength = 0;
+				client.RegisterCallback<GetAuthSessionTicketResponse_t>(AuthResponse);
 				uint ticket = client.native.user.GetAuthSessionTicket( (IntPtr) b, data.Length, out ticketLength );
 				client.RunCallbacks();
+				while (!_responded)
+				{
+					
+				}
                 if ( ticket == 0 )
                     return null;
 
@@ -77,5 +83,10 @@ namespace Facepunch.Steamworks
                 };
             }
         }
+
+		private void AuthResponse(GetAuthSessionTicketResponse_t t)
+		{
+			_responded = true;
+		}
     }
 }
