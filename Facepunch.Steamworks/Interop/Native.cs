@@ -29,7 +29,7 @@ namespace Facepunch.Steamworks.Interop
 
         private bool isServer;
 
-        internal bool InitClient( BaseSteamworks steamworks )
+        internal bool InitClient( BaseSteamworks steamworks, out string state)
         {
             if ( Steamworks.Server.Instance != null )
                 throw new System.Exception("Steam client should be initialized before steam server - or there's big trouble.");
@@ -39,35 +39,40 @@ namespace Facepunch.Steamworks.Interop
             api = new SteamNative.SteamApi();
 
             if ( !api.SteamAPI_Init() )
-            {
+			{
                 Console.Error.WriteLine( "InitClient: SteamAPI_Init returned false" );
-                return false;
+				state = "InitClient: SteamAPI_Init returned false";
+				return false;
             }
 
             var hUser = api.SteamAPI_GetHSteamUser();
             var hPipe = api.SteamAPI_GetHSteamPipe();
             if ( hPipe == 0 )
             {
-                Console.Error.WriteLine( "InitClient: hPipe == 0" );
-                return false;
+				Console.Error.WriteLine( "InitClient: hPipe == 0" );
+				state = "InitClient: hPipe == 0";
+				return false;
             }
 
             FillInterfaces( steamworks, hUser, hPipe );
 
             if ( !user.IsValid )
-            {
-                Console.Error.WriteLine( "InitClient: ISteamUser is null" );
-                return false;
+			{
+				Console.Error.WriteLine( "InitClient: ISteamUser is null" );
+				state = "InitClient: ISteamUser is null";
+				return false;
             }
 
             // Ensure that the user has logged into Steam. This will always return true if the game is launched
             // from Steam, but if Steam is at the login prompt when you run your game it will return false.
             if ( !user.BLoggedOn() )
-            {
-                Console.Error.WriteLine( "InitClient: Not Logged On" );
-                return false;
+			{
+				Console.Error.WriteLine( "InitClient: Not Logged On" );
+				state = "InitClient: Not Logged On";
+				return false;
             }
 
+			state = "Loaded";
             return true;
         }
 

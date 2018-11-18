@@ -12,8 +12,9 @@ namespace Facepunch.Steamworks.Test
     {
         [TestMethod]
         public void GetCount()
-        {
-            using ( var client = new Facepunch.Steamworks.Client( 252490 ) )
+		{
+			string state;
+			using ( var client = new Facepunch.Steamworks.Client( 252490, out state) )
             {
                 Assert.IsTrue( client.IsValid );
 
@@ -33,8 +34,9 @@ namespace Facepunch.Steamworks.Test
 
         [TestMethod]
         public void GetNames()
-        {
-            using ( var client = new Facepunch.Steamworks.Client( 252490 ) )
+		{
+			string state;
+            using ( var client = new Facepunch.Steamworks.Client( 252490, out state) )
             {
                 Assert.IsTrue( client.IsValid );
 
@@ -69,8 +71,9 @@ namespace Facepunch.Steamworks.Test
 
         [TestMethod]
         public void Trigger()
-        {
-            using ( var client = new Facepunch.Steamworks.Client( 252490 ) )
+		{
+			string state;
+			using ( var client = new Facepunch.Steamworks.Client( 252490, out state) )
             {
                 Assert.IsTrue( client.IsValid );
 

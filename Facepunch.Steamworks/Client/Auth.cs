@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SteamNative;
 
 namespace Facepunch.Steamworks
 {
@@ -22,10 +23,10 @@ namespace Facepunch.Steamworks
     }
 
     public class Auth
-    {
-        internal Client client;
+	{
+		internal Client client;
 
-        public class Ticket : IDisposable
+		public class Ticket : IDisposable
         {
             internal Client client;
 
@@ -61,10 +62,10 @@ namespace Facepunch.Steamworks
             var data = new byte[1024];
 
             fixed ( byte* b = data )
-            {
-                uint ticketLength = 0;
-                uint ticket = client.native.user.GetAuthSessionTicket( (IntPtr) b, data.Length, out ticketLength );
-
+			{
+				uint ticketLength = 0;
+				uint ticket = client.native.user.GetAuthSessionTicket( (IntPtr) b, data.Length, out ticketLength );
+				client.RunCallbacks();
                 if ( ticket == 0 )
                     return null;
 
@@ -76,7 +77,5 @@ namespace Facepunch.Steamworks
                 };
             }
         }
-
-
     }
 }

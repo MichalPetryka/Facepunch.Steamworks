@@ -21,15 +21,14 @@ namespace Facepunch.Steamworks
         public Workshop Workshop { get; internal set; }
 
         internal event Action OnUpdate;
-
-        internal Interop.NativeInterface native;
+		internal Interop.NativeInterface native;
 
         private List<SteamNative.CallbackHandle> CallbackHandles = new List<SteamNative.CallbackHandle>();
         private List<SteamNative.CallResult> CallResults = new List<SteamNative.CallResult>();
         protected bool disposed = false;
 
 
-        protected BaseSteamworks( uint appId )
+		protected BaseSteamworks( uint appId )
         {
             AppId = appId;
 

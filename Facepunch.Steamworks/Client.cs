@@ -46,12 +46,13 @@ namespace Facepunch.Steamworks
         /// The currently selected language
         /// </summary>
         public string CurrentLanguage { get; }
+		public string State { get; }
 
 
-        /// <summary>
-        /// List of languages available to the game
-        /// </summary>
-        public string[] AvailableLanguages { get; }
+		/// <summary>
+		/// List of languages available to the game
+		/// </summary>
+		public string[] AvailableLanguages { get; }
 
         public Voice Voice { get; private set; }
         public ServerList ServerList { get; private set; }
@@ -63,7 +64,7 @@ namespace Facepunch.Steamworks
         public User User { get; private set; }
         public RemoteStorage RemoteStorage { get; private set; }
 
-        public Client( uint appId ) : base( appId )
+        public Client( uint appId, out string state) : base( appId )
         {
             if ( Instance != null )
             {
@@ -76,14 +77,17 @@ namespace Facepunch.Steamworks
             //
             // Get other interfaces
             //
-            if ( !native.InitClient( this ) )
+			string bstate = "Not Loaded";
+            if ( !native.InitClient( this, out bstate) )
             {
                 native.Dispose();
                 native = null;
                 Instance = null;
+				state = bstate;
                 return;
             }
 
+			state = bstate;
             //
             // Register Callbacks
             //
@@ -98,6 +102,7 @@ namespace Facepunch.Steamworks
             //
             // Client only interfaces
             //
+			State = state;
             Voice = new Voice( this );
             ServerList = new ServerList( this );
             LobbyList = new LobbyList(this);
@@ -122,7 +127,7 @@ namespace Facepunch.Steamworks
             OwnerSteamId = native.apps.GetAppOwner();
             var appInstallDir = native.apps.GetAppInstallDir(AppId);
 
-            if (!String.IsNullOrEmpty(appInstallDir) && Directory.Exists(appInstallDir))
+            if (!string.IsNullOrEmpty(appInstallDir) && Directory.Exists(appInstallDir))
                 InstallFolder = new DirectoryInfo(appInstallDir);
 
             BuildId = native.apps.GetAppBuildId();

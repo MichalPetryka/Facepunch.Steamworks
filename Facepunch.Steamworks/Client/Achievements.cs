@@ -100,7 +100,12 @@ namespace Facepunch.Steamworks
             return client.native.userstats.ClearAchievement( identifier );
         }
 
-        private void UserStatsReceived( UserStatsReceived_t stats )
+		public bool IndicateAchievementProgress(string pchName, uint nCurProgress, uint nMaxProgress)
+		{
+			return client.native.userstats.IndicateAchievementProgress(pchName, nCurProgress, nMaxProgress);
+		}
+
+		private void UserStatsReceived( UserStatsReceived_t stats )
         {
             if ( stats.GameID != client.AppId ) return;
 
